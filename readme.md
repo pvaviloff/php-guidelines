@@ -27,3 +27,4 @@
     - [Объектно-ориентированное программирование](./architecture/oop.md)
 - Куда писать код? Структуризация проекта 
     - [GRASP](./architecture/grasp.md)
+    - [SOLID](./architecture/solid.md)
