@@ -28,3 +28,4 @@
 - Куда писать код? Структуризация проекта 
     - [GRASP](./architecture/grasp.md)
     - [SOLID](./architecture/solid.md)
+    - [Паттерны проектирования](./architecture/design-patterns.md)

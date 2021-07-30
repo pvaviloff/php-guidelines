@@ -11,14 +11,14 @@ interface IBill {
     public function getSum(): float;
 }
 
-class FoodBill extends IBill {
+class FoodBill implements IBill {
     public function getSum(): float
     {
         ...
     }
 }
 
-class DrinkBill extends IBill {
+class DrinkBill implements IBill {
     public function getSum(): float
     {
         ...
