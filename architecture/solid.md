@@ -5,11 +5,13 @@
 Dependency Inversion (Принцип инверсии зависимостей) главная цель данного принципа уменьшить зацепление классов между собой.
 
 ```php
-interface FileContract {
+interface FileContract 
+{
     public function getDocumentBody(): string;
 }
 
-class Bill implements FileContract {
+class Bill implements FileContract 
+{
     public function getDocumentBody(): string
     {
         ...
@@ -17,7 +19,8 @@ class Bill implements FileContract {
     }
 }
 
-class Report implements FileContract {
+class Report implements FileContract 
+{
     public function getDocumentBody(): string
     {
         ...
@@ -25,14 +28,16 @@ class Report implements FileContract {
     }
 }
 
-class Printer {
+class Printer 
+{
     public function execute(FileContract $file) 
     {
         // логика печати
     }
 }
 
-class PrintBill {
+class PrintBill 
+{
     public function execute() 
     {
         $printer = new Printer();
@@ -42,7 +47,8 @@ class PrintBill {
     }
 }
 
-class PrintReport {
+class PrintReport 
+{
     public function execute() 
     {
         $printer = new Printer();
@@ -62,7 +68,8 @@ Dependency injection при помощи абстракции один раз н
 Примеры реализации есть в вендорном пакете [php di](https://github.com/PHP-DI/PHP-DI), [symfony](https://symfony.com/doc/current/components/dependency_injection.html) и [laravel](https://laravel.com/docs/8.x/providers) 
 
 ```php
-class PrintReport {
+class PrintReport 
+{
     private Printer $printer;
 
     public function __construct(Printer $printer)
