@@ -149,16 +149,6 @@ class BrandEntity
      */
     private Uuid $guid;
 
-    /**
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
-     */
-    private \DateTime $createdAt;
-
-    /**
-     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
-     */
-    private \DateTime $updatedAt;
-
     public function __construct(
         /**
          * @ORM\Column(length: 140)
@@ -166,32 +156,11 @@ class BrandEntity
         private readonly int $name,
     ) {
         $this->guid = Uuid::v4();
-        $this->updatedAt = new \DateTime('now');
-        $this->createdAt = new \DateTime('now');
-    }
-
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
-    public function updatedTimestamps(): void
-    {
-        $this->updatedAt = new \DateTime('now');
     }
 
     public function getGuid(): Uuid
     {
         return $this->guid;
-    }
-
-    public function getCreatedAt(): \DateTime
-    {
-        return $this->createdAt;
-    }
-
-    public function getUpdatedAt(): \DateTime
-    {
-        return $this->updatedAt;
     }
 }
 ```
