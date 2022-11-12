@@ -107,21 +107,21 @@ The Open Closed Principle Класс открыт для расширения з
 
 #### Структура проекта
 
----- src/
----- ---- ExampleDomain/
----- ---- ---- [Aggregates/](#aggregates)
----- ---- ---- [Constants/](#constants)
----- ---- ---- [Entities/](#entity)
----- ---- ---- [Exceptions/](#exceptions)
----- ---- ---- [Repositories/](#repository)
----- ---- ---- [Services/](#services)
----- ---- ---- [ValueObjects/](#dto-и-valueobject)
----- ---- ExampleInfrastructure/
----- ---- ---- Commands/
----- ---- ---- Controllers/
----- ---- ---- EventListeners/
----- ---- ---- Requests/
----- ---- ---- Responses/
+---- src/  
+---- ---- ExampleDomain/  
+---- ---- ---- [Aggregates/](#aggregates)  
+---- ---- ---- [Constants/](#constants)  
+---- ---- ---- [Entities/](#entity)  
+---- ---- ---- [Exceptions/](#exceptions)  
+---- ---- ---- [Repositories/](#repository)  
+---- ---- ---- [Services/](#services)  
+---- ---- ---- [ValueObjects/](#dto-и-valueobject)  
+---- ---- ExampleInfrastructure/  
+---- ---- ---- Commands/  
+---- ---- ---- Controllers/  
+---- ---- ---- EventListeners/  
+---- ---- ---- Requests/  
+---- ---- ---- Responses/  
 
 ### Entity
 
