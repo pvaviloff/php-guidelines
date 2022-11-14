@@ -85,7 +85,7 @@ The Open Closed Principle Класс открыт для расширения з
 
 Сущность - это класс, описывающий структуру баз данных.
 
-Трансформер - класс, преобразующий конечный результат для дальнейшей передачи.
+Трансформер - класс, преобразующий конечный результат для дальнейшей передачи. Размещаем рядом с сервисом для которого и предназначен трансформер. 
 
 Для того, чтоб связать Контроллер, Сервис и Репозиторий между собой используем ValueObject. ValueObject так же обьединяет в себе и понятие DTO для уменьшения кол-ва сущностей. Зачастую DTO при изменениях бизнеслогики часто перетикает в ValueObject.
 
@@ -267,10 +267,10 @@ final class BrandRepository
             ->andWhere("guid = {$builder->createNamedParameter($guid->toString())}")
             ->fetchAssociative();
 
-            return new BrandObject(
-                Uuid::fromString($brand['guid']),
-                $brand['name'],
-            );
+        return new BrandObject(
+            Uuid::fromString($brand['guid']),
+            $brand['name'],
+        );
     }
 
     // пример получения листа  
