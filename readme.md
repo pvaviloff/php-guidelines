@@ -264,7 +264,7 @@ final class BrandRepository
                 'name',
             ])
             ->from(DbConst::BRANDS)
-            ->andWhere("name = {$builder->createNamedParameter($guid->toString())}")
+            ->andWhere("guid = {$builder->createNamedParameter($guid->toString())}")
             ->fetchAssociative();
 
             return new BrandObject(
@@ -354,3 +354,7 @@ final class BrandCreator
 ### Коллекции
 
 Советуюем использовать реализацию [https://github.com/ramsey/collection](https://github.com/ramsey/collection) так как они типизированы. По возможности не использовать массивы.
+
+## Автоматизация проверки архитектуры
+
+Для автоматизации проверки советуем испольозвать в проектах [deptrac](https://github.com/qossmic/deptrac) и [psalm](https://github.com/vimeo/psalm) на 3 уровне. Проверять ее на каждой пушнутой ветке в репозиторий при помоши экшена.
