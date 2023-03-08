@@ -1,8 +1,8 @@
-## SOLID принципы
+## SOLID
 
-Из SOLID понадобиться всего один принцип Dependency Inversion и его реализация dependency injection, который поможет обеспечить Low Coupling.
+The only SOLID principle needed is Dependency Inversion and its implementation through dependency injection, which helps achieve Low Coupling.
 
-Dependency Inversion (Принцип инверсии зависимостей) главная цель данного принципа уменьшить зацепление классов между собой.
+The main goal of the Dependency Inversion principle is to reduce the coupling between classes.
 
 ```php
 interface FileContract 
@@ -32,7 +32,7 @@ class Printer
 {
     public function execute(FileContract $file) 
     {
-        // логика печати
+        // printing logic
     }
 }
 
@@ -59,13 +59,11 @@ class PrintReport
 }
 
 ```
-Класс `Printer` зависит от контракта `FileContract`, который нужно реализовать. Такой подход позволяет использовать класс `Printer` для печати чего угодно.
-Единственная проблема. Предположим что класс `Printer` будет у себя в конструкторе принимать еще какой-то объект в конструкторе допустим `PrinterSettings`. 
-Тогда получается что `PrintReport` и `PrintBill` будут зависеть от класса `PrinterSettings` хотя кроме как для настройки `Printer` он применяться не будет. 
+The `Printer` class depends on the `FileContract` interface, which needs to be implemented. This approach allows the `Printer` class to be used for printing anything. The only problem is that if the `Printer` class also takes another object in its constructor, for example, `PrinterSettings`, then `PrintReport` and `PrintBill` will also depend on the `PrinterSettings` class, even though it is only used for setting up the `Printer`.
 
-Обратимся к инструменту, который решит проблему с зависимостями. Убрать эту лишнюю зависимость можно при помощи Dependency injection которая обеспечивает инверсию управления из ООП принципов.
-Dependency injection при помощи абстракции один раз настроив класс его можно использовать в других реализациях, не затягивая лишние зависимости класса.
-Примеры реализации есть в вендорном пакете [php di](https://github.com/PHP-DI/PHP-DI), [symfony](https://symfony.com/doc/current/components/dependency_injection.html) и [laravel](https://laravel.com/docs/8.x/providers) 
+We can turn to the tool that solves the dependency problem. The unnecessary dependency can be removed using Dependency Injection, which provides inversion of control from the principles of OOP.
+By configuring the class once using an abstraction, it can be used in other implementations without dragging unnecessary dependencies into the class.
+There are implementation examples in the vendor packages [php di](https://github.com/PHP-DI/PHP-DI), [symfony](https://symfony.com/doc/current/components/dependency_injection.html) and [laravel](https://laravel.com/docs/8.x/providers).
 
 ```php
 class PrintReport 
@@ -87,5 +85,4 @@ $printReport = $container->get(PrintReport::class);
 $printReport->execute();
 ```
 
-Переменная `$container` инициализируется в ядре и глобальна по всему приложению. Исполняется фасадом/синглтоном или иными способами.
-В laravel это функция `app()`, в symfony класс `ContainerBuilder` отвечает за получение настроенного объекта.
+The `$container` variable is initialized in the core and is global throughout the application. It is executed through a facade/singleton or other means. In Laravel, this is the `app()` function, while in Symfony, the `ContainerBuilder` class is responsible for obtaining the configured object.

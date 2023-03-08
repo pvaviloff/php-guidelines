@@ -1,16 +1,12 @@
-## Паттерны проектирования (Design Patterns)
+## Design Patterns
 
-Паттерны нужны только там, где они уместны. У каждого паттерна есть собственная цель и область применения. 
-Если нет точной уверенности что использование паттерна решит проблему масштабирования приложения, то и использование его не рекомендуется. 
+Patterns are only necessary where they are appropriate. Each pattern has its own goal and scope of application. If there is no certainty that the use of a pattern will solve the problem of scaling the application, then it is not recommended to use it.
 
-Так же есть один из самых распространенных паттернов так же один из самых полезных - это фабричный метод. 
-Его самый важный плюс в том, что его цель отделить конкретику от общего процесса. При этом достигается инкапсуляция. 
-Так же соблюдается инверсия зависимостей. И реализация не уходит в излишнюю абстракцию, что сохраняет читабельность, и не делает из кода лазанью. 
+One of the most common and useful patterns is the Factory Method. Its main advantage is that it separates the specifics from the general process, achieving encapsulation. In addition, it adheres to the principle of Inversion of Control. Its implementation does not lead to excessive abstraction, which preserves readability and does not turn the code into a mess.
 
-Типовая задача звучит примерно всегда одинаково: У нас есть разные сущности, которые должны иметь одинаковое поведение. 
+The typical problem sounds almost always the same: we have different entities that should have the same behavior.
 
-Возьмем к примеру склад на который товар может прийти различными способами и будет различие в оприходовании, но выгружен на одном и том же складе. 
-Допустим нам его может привезти грузовик, или он может прийти к нам пароходом. 
+Let's take a warehouse, where goods can arrive in different ways and there may be differences in inventorying, but they are still stored in the same warehouse. For example, the goods can be delivered by truck or by ship.
 ```php
 interface IArrival 
 {
@@ -58,6 +54,6 @@ class StockControl
 }
 ```
 
-Таким образом происходит деление задачи на две подзадачи. Первое определить сам товар и оприходовать его. Вторая разместить на складе.
+This way, the task is divided into two subtasks. The first one is to identify the goods and receive them. The second one is to place them in the warehouse.
 
-Так же есть разные вариации, трактования и подтипы паттернов, что привело к нарушению принципа не плодить сущности сверх необходимого.
+There are also various variations, interpretations, and subtypes of patterns, which led to a violation of the principle of not creating entities beyond what is necessary.

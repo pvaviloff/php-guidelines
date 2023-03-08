@@ -1,13 +1,13 @@
-## Функциональное программирование
+## Functional Programming
 
-В PHP функциональное программирование реализовано не полностью. 
-Но из данного подхода написания кода можно подчеркнуть самую главную концепцию - **Чистые функции**.
+In PHP, functional programming is not fully implemented.
+However, from this approach to writing code, the most important concept can be highlighted - **Pure functions**.
 
-_Чистыми называют функции, которые не имеют побочных эффектов ввода-вывода и памяти (они зависят только от своих параметров и возвращают только свой результат).(с)Википедия_
+_A pure function is defined as a function that has no side effects on input-output and memory (it depends only on its parameters and returns only its result). (c) Wikipedia_
 
-В PHP есть чистые функции из коробки. К примеру `array_map` или `array_filter`. Так же есть и грязные функции к примеру `date`
+In PHP, there are pure functions out of the box. For example, `array_map` or `array_filter`. There are also impure functions, such as `date`.
 
-Чистые функции имеют огромное преимущество - предсказуемое поведение.
+Pure functions have a huge advantage - predictable behavior.
 ```php 
 $orderProducts = [
     ['quantity' => 3, 'price' => 3.6], 
@@ -18,6 +18,6 @@ $orderProductsSum = array_map(fn($product) => $product['quantity'] * $product['p
 $orderSum = array_sum($orderProductsSum);
 ```
 
-Эти функции не модифицируют входные параметры. При одинаковых входных параметров всегда на выходе один и тот же результат.
+These functions do not modify the input parameters. With the same input parameters, the output is always the same.
 
-Данную концепцию можно перенести и на методы объектов.
+This concept can also be applied to object methods.

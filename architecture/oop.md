@@ -1,11 +1,11 @@
-## Объектно-ориентированное программирование
+## Object-oriented programming
 
-Цель ООП достичь полиморфизма. Полиморфизм обеспечивает масштабируемость проекта. Еще одно преимущество ООП это инкапсуляция.
+The goal of OOP is to achieve polymorphism. Polymorphism provides scalability to the project. Another advantage of OOP is encapsulation.
 
-Полиморфизм представляет собой единый сценарий обработки объектов разных экземпляров классов. 
-В первую очередь полиморфизма нужно добиться для классов, которые реализуют бизнес логику. 
+Polymorphism represents a single scenario for processing objects of different class instances.
+First and foremost, polymorphism should be achieved for classes that implement business logic.
 
-В пример можно привести формирование одного счета в кафе, где за бар и еду платим отдельно из-за разного формирования цены.
+As an example, we can consider the process of creating a single bill in a cafe, where we pay separately for the bar and food due to the different pricing methods.
 ```php 
 interface IBill 
 {
@@ -47,13 +47,15 @@ class FullBill
     }
 }
 ```
-При данной реализации добавить отдельный расчет, реализующий другую логику формирования суммы, не составит труда. Но тут так же играет роль сам бизнес процесс, который и диктует требования к реализации.
-Всегда из поставленной задачи необходимо попытаться предположить как может измениться процесс. Так как можно усложнить приложение там, где никогда процесс работы не поменяется.
+The goal of OOP is to achieve polymorphism, which provides scalability of the project. Another advantage of OOP is encapsulation.
 
-Наследование является достаточно спорным решением для достижения полиморфизма из-за рисков создания God object и/или уход в излишнюю абстракцию, которая приведет к сильной зависимости(связанности) классов между собой вдобавок усложнив читабельность кода.
-По возможности не используйте абстрактные классы, если не достигается полиморфизм.
+Polymorphism represents a single scenario for processing objects of different class instances. Polymorphism should be achieved primarily for classes that implement business logic.
 
-Инкапсуляция помогает же скрыть детали реализации. Зачастую чтоб отрефакторить старый код, понять его логику помогает подход реализуемый в 3 этапа:
-- разделить код на логические куски.
-- инкапсулировать логику этих кусков кода.
-- написав по возможности unit тесты, попутно задокументировав логику работы, внести необходимые изменения.
+In this implementation, adding a separate calculation that implements a different logic for calculating the sum will not be difficult. However, the business process itself also plays a role, which dictates the requirements for implementation. It is always necessary to try to anticipate how the process can change from the given task. Otherwise, it is possible to complicate the application where the work process will never change.
+
+Inheritance is a controversial solution for achieving polymorphism due to the risks of creating a God object and/or going into excessive abstraction, which will lead to strong dependence (coupling) of classes with each other and further complicating code readability. If polymorphism is not achieved, abstract classes should not be used if possible.
+
+Encapsulation helps to hide implementation details. Often, to refactor old code, a three-stage approach is used to understand its logic:
+- divide the code into logical pieces.
+- encapsulate the logic of these pieces of code.
+- write unit tests if possible, documenting the logic of the work, and make the necessary changes.

@@ -1,110 +1,105 @@
-## Методические указания PHP
+## PHP Guidelines
 
-### Предисловие
+### Introduction
 
-Здесь будет описан набор стратегий/рекомендаций, которые позволяют масштабировать команду разработки и структурировать проект. 
-Для достижения масштабирования команды ставиться всего две цели, порождающие процесс, необходимо писать код как один разработчик и писать документацию так, чтоб ее понимал человек, пришедший с улицы.
-Эти цели недостижимы. Они ставятся для порождения процесса, улучшающего понимание проекта в команде. 
+This document provides a set of strategies/recommendations for scaling up development teams and structuring projects. To achieve team scalability, there are two goals that drive the process: writing code as if it was developed by a single developer, and writing documentation that can be understood by someone off the street.
 
-Перед внедрением каких-либо процессов необходимо провести экспертный анализ. 
-Если на проекте код находится на физическом сервере или VPS, код на сервер доставляется пуллом с репозитория актуальной версии проекта или прямой доставкой приложения по SSH. 
-А архитектура проекта заканчивается на MVC.
-В таком случае категорически не рекомендуется пытаться все перевести на микросервисы, которые будут крутиться в kubernetes в облаке за одну итерацию.
-На проекте работают люди, и при внедрении актуальных инструментов, архитектурных решений и сервисов, есть риск столкнуться с непониманием и не принятием со стороны команды. 
-Проект должен прожить все этапы развития. Сколько времени займет создание процесса и внедрение новых инструментов зависит только от команды.  
+These goals are unattainable, and they are set to drive a process that improves the team's understanding of the project.
 
-Команда не однородна. Ориентиром окончания внедрения процесса можно считать когда 80% команды следует выстроенному процессу.
-Внедрение новой технологии порождает/изменяет/накладывает ограничения на процесс работы. 
-Перед внедрением нужно провести анализ готовности команды.
+Before implementing any processes, an expert analysis is necessary. If the project's code is on a physical server or VPS, the code is delivered to the server via a pull from the repository of the current version of the project, or through direct delivery of the application via SSH. The project architecture ends with MVC.
 
-### Базовые понятия и логика применения теоритических знаний
+In this case, it is strongly recommended not to try to convert everything into microservices that will run on Kubernetes in the cloud in a single iteration.
 
-- Как писать код? Базовые подходы к написанию кода
-    - [Функциональное программирование](./architecture/functional-programming.md)
-    - [Объектно-ориентированное программирование](./architecture/oop.md)
-- Куда писать код? Структуризация проекта 
+People work on the project, and there is a risk of encountering misunderstandings and non-acceptance from the team when implementing relevant tools, architectural solutions, and services. The project must go through all stages of development. The time it takes to create a process and implement new tools depends solely on the team.
+
+The team is not homogeneous. The end of the implementation process can be considered when 80% of the team follows the established process. The introduction of new technology generates/changes/imposes restrictions on the work process. Before implementation, an analysis of the team's readiness is required.
+
+### Basic concepts and logic for applying theoretical knowledge
+
+- How to write code? Basic approaches to coding.
+    - [Functional programming](./architecture/functional-programming.md)
+    - [Object-oriented programming](./architecture/oop.md)
+- Where to write code? Project structuring. 
     - [GRASP](./architecture/grasp.md)
     - [SOLID](./architecture/solid.md)
-    - [Паттерны проектирования](./architecture/design-patterns.md)
+    - [Design patterns](./architecture/design-patterns.md)
 
-### Введение
+### Preamble
+The main goal of the team is to solve business process-related problems promptly. Therefore, all code should be written according to [PSR-4](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader-examples.md) and [Clean Code](https://github.com/piotrplenik/clean-code-php). If you are not sure whether you are writing readable code, consult your neighbor. It does not have to be someone from the team. We follow the rule: "If two people understood what was written, the third is likely to understand it too."
 
-В первую очередь командой преследуется цель оперативного решения проблем связанных с бизнес процессом. По этому весь код должен быть написан согласно [PSR-4](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader-examples.md) и [Чистый код](https://github.com/3xter/clean-code-php). Еcли нет уверенности, что вы пишете читабельный код посоветуйтесь с соседом рядом. Не обязательно это должен быть кто-то из команды. Придерживаемся правила: "Если два человека поняли написанное, третий с большой вероятностью тоже поймет".
+The first problems start with implicitly described tasks and poorly designed base. If you have any questions while reading the task, first of all, write them in the task comment and ask the PM. There are often situations where you discuss the clarification of the task directly with the task assigner. If this happens, make it a rule to notify the PM of any changes/clarifications. Ask the task assigner to adjust the task or even just send the correspondence in which you resolved the unclear points to the task. All clarifications and/or changes to the task must be recorded in the task. This can lead to a task re-estimation.
 
-Первые проблемы начинаются с неявно описанных тасков и плохо спроектированной базы. Если при прочтении таска у вас возникли вопросы в первую очередь пишем их в таск комментарием, обращаемся к ПМ-у. Часто бывают ситуации, когда уточнение задачи вы обсуждаете напрямую с постановщиком. Если такое случается берем за правило оповестить ПМ-а про изменения/уточнения. Просим постановщика подправить сам таск или даже просто в таск скинуть переписку в которой вы решили непонятные моменты. В таске обязательно должны быть зафиксированы все уточнения и/или изменения задачи. Это может привести к переэстимейту таска.
+What to do with an existing database? If you do not understand the structure of the database or how it works, contact the team lead. They will either provide guidance or direct you to the person who developed the functionality and/or knows the answers to your questions. We recommend visualizing the part of the tables that you are working with. Do this in [https://oino.uno/db-architecture](https://oino.uno/db-architecture) or [https://www.dbdesigner.net/](https://www.dbdesigner.net/) You can upload the described structure to the task comments. This can help you in the future when reopening the task after some time, or to another person when completing related tasks. Additionally, the described table structure can serve as the basis for documentation for the functionality.
 
-Что делать с существующей базой? Если вам не понятна структура базы или логика работы обращаемся к тим лиду. Он или подскажет или направит к человеку, который разрабатывал функционал и/или знает ответы на ваши вопросы. Советуем визуализировать часть таблиц, с которой вы работаете. Делаем это в [https://oino.uno/db-architecture](https://oino.uno/db-architecture) или [https://www.dbdesigner.net/](https://www.dbdesigner.net/) Описанную структуру можно закинуть в таск комментарием. Это может помочь вам в будущем при переоткрытии таска через время, или другому человеку при выполнении связанных тасков. Так же описанная структура таблиц может лечь в основу документации к функционалу.
+What should you do if the logic described in the task does not match the implementation in the project? This is often related to old functionality. Especially if the person who created it no longer works in the company, and their functionality has been handed over to another person. In this case, it is necessary to inform the PM, and document it in the task. Then act according to the situation.
 
-Что делать если логика, которая описана в таске не совпадает с реализацией в проекте? Это зачастую связанно со старым функционалом. Особенно если постановщик больше не работает в компании, и его функционал отдали другому человеку. В таком случае необходимо сообщить об этом ПМ-у, отписать в таск. Дальше действовать по ситуации.
+To understand the business logic of old/new functionality, it is desirable to visualize it using [https://oino.uno/diagrams](https://oino.uno/diagrams) or [https://app.diagrams.net](https://app.diagrams.net/) The flowchart does not have to match the code written exactly. It should visualize the business logic. In the future, this chart can also serve as the foundation for documentation.
 
-Для понимания бизнес логики старой/новой желательно ее визуализировать [https://oino.uno/diagrams](https://oino.uno/diagrams) или [https://app.diagrams.net](https://app.diagrams.net/) Блок-схема не обязана совпадать полностью с написанным кодом. Она должна визуализировать бизнес логику. В дальнейшем эта схема может так же стать фундаментом для документации.
+Do we need to write documentation? Documentation is only necessary for functionality that has a complex logic that needs to be visualized. What is "complex logic"? If you start having questions during implementation/refactoring/enhancement of how the functionality should work. Then, in any case, a Confluence page with a description of the database structure and a block diagram of the business logic should be created at a minimum. The page is created for you by the PM. The documentation should have fewer words and more visual diagrams with descriptions. It is easier to perceive information visually than through long text.
 
-Нужно ли писать документацию? Документация нужна только для функционала, который имеет сложную для понимания логику, которую необходимо визуализировать. Что такое "сложная логика"? Если у вас начали появляться вопросы при реализации/рефакторинге/доработке как функционал должен работать. Тогда в обязательном порядке должна появиться страница в Confluence с описанием структуры базы и блок-схемой бизнес логики как минимум. Страницу вам заводит ПМ. В документации должно быть меньше слов, больше визуальных схем с описанием. Легче воспринимать информацию визуально чем через полотна текста.
+Documentation should consist of two blocks. You describe the technical documentation. Also, through the PM, ask the product owner to describe the user documentation, which should describe: why the functionality was created, how to use it (preferably with screenshots) from the user's point of view (UX). You need to describe how it should work, and the product owner should describe how to work with it.
 
-Документация должна состоять из двух блоков. Вы описываете тех. документацию. Так же просите постановщика через ПМ-а описать пользовательскую документацию, в которой должно описываться: зачем создан функционал, как с ним работать (желательно скриншотами) с точки зрения пользователя (UX). Вы должны описать как это должно работать, постановщик - как с этим работать.
+#### Used concepts
 
-#### Используемые концепции
+The team aims to write as one developer. What does it mean? Empirically identified principles and recommendations have been developed that work within the overall system and allow the entire team to write in one style. The basis is taken from the Symfony documentation, SOLID, and DDD.
 
-В команде преследуется цель писать как один разработчик. Что это означает? Эмпирическим путем выявлены принципы и рекомендации, которые работают в рамках общей системы и позволяют писать в одном стиле всей команде. За основу взяты: документация Symfony, SOLID и DDD.
+#### Taking the concept of functionality implementation from Domain Driven Design:
 
-#### С Domain Driven Design берем концепт реализации функционала:
+The written code should make sense not only for programmers but also for the business. The programmer and the project manager should speak the "same language." All entities and properties should be named as the project manager names them. If it's "Refunds," then it should be "Refund," if it's "Orders," then it should be "Order." Glossaries should be compiled, and entities should be described wherever possible.
 
-Написанный код должен иметь смысл не только для программистов, но и для бизнеса. Программист и постановщик должны говорить на "одном языке". Все сущности и свойства должны называться так, как их называет постановщик. Если это Возвраты, то это Refund, если это Заказ, то это Order. По возможности составлять глоссарии, и описывать сущности.
+The programmer's priorities should correspond to business priorities.
 
-Приоритеты программиста должны соответствовать бизнес-приоритетам.
+The programmer should act as a translator from the language of the project manager to the programming language.
 
-Программист должен выступать в роли переводчика с языка постановщика на язык программирования.
-
-Также придерживаемся принципа "слоеного пирога". Разграничиваем зоны ответственности и связываем каждую зону при помощи dependency injection (DI).
+We also adhere to the principle of a "layered cake." We delimit responsibility zones and link each zone using dependency injection (DI).
 ![onion](./images/onion.png)
 
-#### Используется из SOLID:
+#### Used from SOLID:
 
-The Single Responsibility Principle Сервис должен иметь только одну обязанность. Спокойно реализуется в наших условиях. Как при рефакторинге, так и при разработке нового функционала.
+The Single Responsibility Principle states that a service should have only one responsibility. It is easily implemented in our conditions, both during refactoring and when developing new functionality.
 
-The Dependency Inversion Principle Сервисы верхних уровней не должны зависеть от сервисов нижних уровней. Оба типа сервисов должны зависеть от абстракций. Абстракции не должны зависеть от деталей. Детали должны зависеть от абстракций.
+The Dependency Inversion Principle states that high-level services should not depend on low-level services. Both types of services should depend on abstractions. Abstractions should not depend on details. Details should depend on abstractions.
 
-The Interface Segregation Principle Лучше иметь много интерфейсов под конкретные реализации, чем один универсальный. Если есть необходимость в написании unit тестов этому принципу необходимо следовать. В проекте нет необходимости писать под каждый класс интерфейс.
+The Interface Segregation Principle suggests that it is better to have many interfaces for specific implementations than one universal interface. If there is a need to write unit tests, this principle should be followed. There is no need to write an interface for each class in the project.
 
+The Liskov Substitution Principle states that if S is a subtype of T, then objects of type T can be replaced with objects of type S without any desired properties being changed. It is partially achievable and depends on implementation.
 
-The Liskov Substitution Principle  Замещения - если S является подтипом T, тогда объекты типа T в программе могут быть замещены объектами типа S без каких-либо изменений желательных свойств. Частично выполним, зависит от реализации.
+#### Not used from SOLID:
 
-#### Не используется из SOLID:
+The Open Closed Principle A class should be open for extension but closed for modification. The biggest problem is that not everyone from other teams may follow the SOLID principles. In projects with 10+ people, it is difficult to maintain versioning of objects.
 
-The Open Closed Principle Класс открыт для расширения закрыт для модификации. Самая большая проблема: не факт что кто-то из другой команды следует принципам SOLID. В проетах где работает 10+ человек стожно поддерживать версионность обектов.
+We use Dependency Injection to remove dependencies between Controllers, Services, and Repositories and to reduce code coupling.
 
-Используем Dependency Injection для того, чтоб убрать связи Контроллеров с Сервисами и Репозиториями и для уменьшения связанности кода.
+### General implementation scheme
 
-### Общая схема реализации функционала
+Based on MVC, we build a basic architecture:
 
-На основе MVC строим базовую архитектуру: 
+Service - a class that implements business logic.
 
-Сервис - это класс, который реализует бизнес логику.
+Repository - a class that manages data storage (MySQL, MongoDB, ClickHouse). We write all queries to the databases in it.
 
-Репозиторий -  это класс, который управляет хранилищами данных (MySQL, MongoDB, ClickHouse) В нём пишем все запросы к базам
+Entity - a class that describes the structure of databases.
 
-Сущность - это класс, описывающий структуру баз данных.
+Transformer - a class that transforms the final result for further transmission. Place it next to the service for which it is intended.
 
-Трансформер - класс, преобразующий конечный результат для дальнейшей передачи. Размещаем рядом с сервисом для которого и предназначен трансформер. 
+To link the Controller, Service, and Repository together, we use a Value Object. The Value Object also combines the concept of DTO to reduce the number of entities. Often, DTOs when changing business logic often merge into Value Objects.
 
-Для того, чтоб связать Контроллер, Сервис и Репозиторий между собой используем ValueObject. ValueObject так же обьединяет в себе и понятие DTO для уменьшения кол-ва сущностей. Зачастую DTO при изменениях бизнеслогики часто перетикает в ValueObject.
+## General Interaction Scheme
 
-## Общая схема взаимодействия
+### Prohibited/Permitted/Required in Domain
 
-### Запрещено/разрешено/требуется использовать в Domain
+In the Domain, the use of ORM models is prohibited. Instead, we use Entity to store data and Repository to write queries to the database. And for business relationships between entities, we use Aggregate.
 
-В Domain запрещено использовать ORM модели. Вместо них используем Entity для хранения и Repository для написания запросов к базе. И для бизнес связей Entity между собой используем Aggregate 
+In Service methods, explicit variables of types such as int/string/float/bool, as well as Entity/ValueObject/Aggregate objects, should be passed as input.
 
-В Service методах на вход нужно принимать явные переменные типа int/string/float/bool так же обьекты Entity/ValueObject/Aggregate
+It is prohibited to write a Controller that implements multiple methods. We write one route - one Controller.
 
-Запрещается писать Controller в котором реализовано несколько методов. Пишем один route - один Controller
+In Controllers that implement business logic from Domains, it is prohibited to use the basic Request.
 
-Запрещено в Controller, который реализует бизнес логику из Domains, принимать базовый Request.
+The use of traits is prohibited in projects.
+Direct access to the container is prohibited (with the exception of service providers and factories).
 
-В проектах запрещено использовать trait.
-Запрещено обращатся к контейнеру напрямую (исключение - сервис провайдера и фабрики)
-
-#### Структура проекта
+#### Project structure
 
 ---- src/  
 ---- ---- ExampleDomain/  
@@ -124,7 +119,7 @@ The Open Closed Principle Класс открыт для расширения з
 
 ### Entity
 
-Entity (Сущность) - определяет некоторую сущность в бизнес логике и обязательно имеет идентификатор(уникальный ключ. Ключ может быть выражен как id/guid/uuid так и совокупностью свойств(составной уникальный ключ), которые будут идентифицировать entity.), по которому Entity можно найти или сравнить с другой Entity. Если две Entity имеют идентичный идентификатор — это одна и та же Entity. Практически всегда изменяем.
+Entity - defines a certain entity in the business logic and always has an identifier (a unique key. The key can be expressed as an id/guid/uuid or a combination of properties (a composite unique key) that will identify the entity), by which the Entity can be found or compared to another Entity. If two Entities have identical identifiers, they are the same Entity. It is almost always mutable.
 
 ```php
 <?php
@@ -164,13 +159,13 @@ class BrandEntity
 }
 ```
 
-### DTO и ValueObject
+### DTO and ValueObject
 
-Data Transfer Object(DTO) -  это обьект, структура данных, которая переносит информацию между процессами (Контроллерами, Сервисами, Репозиториями). Желательно не изменять уже засеченые свойства, чтоб избавиться от неявной логики. Он не имеет зависимостей. В нем находятся только типизированные свойства и геттеры с сеттерами. Никаких логических действий в этом обьекте не может быть. Зачастую используется для подбрасывания в сервисы и репозитории фильтров с контроллера.
+Data Transfer Object (DTO) - is an object, a data structure that carries information between processes (Controllers, Services, Repositories). It is desirable not to change already set properties to get rid of implicit logic. It has no dependencies. It only contains typed properties and getters/setters. No logical actions can be performed in this object. It is often used to pass filters from the controller to services and repositories.
 
-Зачем пробрасывать обьект, а не просто указать в методе екзекюторе типизированную переменную? При поддержке функционала, кол-во кода и фич увеличивается. Максимальное кол-во переменных, прокинутых в метод, должно быть максимум 5. Если сервис часто используется в разных функционалах, каждый вызов необходимо будет переписывать. Это не правильно. Прокидывание в екзекютор сервиса или метод репозитория обьекта сохранит структуру кода.
+Why pass an object instead of just specifying a typed variable in the method executor? When supporting functionality, the amount of code and features increases. The maximum number of variables passed to a method should be a maximum of 5. If a service is frequently used in different functionalities, each call will need to be rewritten. This is not correct. Passing an object to the executor of a service or repository method will maintain the structure of the code.
 
-Value Object - это иммутабельный тип, значение которого задается при создании и не меняется на протяжении всей жизни объекта. Не имеет идентификатора. Могут содержать логику (валидацию, реализовывать интерфейсы  \JsonSerializable, Arrayable, \Countable\Serializable и т д) и обычно они не используются для передачи информации между приложениями. Они используются внутри сервисов для работы с сущностными. Их можно отдавать как результат выполнения сервиса. Если два Value Object структурно одинаковы — они эквивалентны. Можно писать методы проверки и фильтровать данные. к примеру isEmpty, equals, sanitizedName.
+Value Object - is an immutable type, the value of which is set at creation and does not change throughout the life of the object. It has no identifier. They can contain logic (validation, implement interfaces \JsonSerializable, Arrayable, \Countable\Serializable, etc.) and usually they are not used to transfer information between applications. They are used inside services to work with entities. They can be returned as a result of a service execution. If two Value Objects are structurally identical, they are equivalent. Methods for checking and filtering data can be written, for example isEmpty, equals, sanitizedName.
 ```php
 <?php
 namespace App\BrandDomain\ValueObjects;
@@ -185,9 +180,9 @@ final class BrandCreatorObject
 
 ### Aggregates 
 
-Aggregate(Агрегат) - использование агрегатов позволяет избегать чрезмерного соединения объектов между собой, составляющих модель. Это позволяет избежать путаницы и упростить структуру, потому что не позволяет создавать тесно связанные системы.
+Aggregate - the use of aggregates allows avoiding excessive connection between objects that make up the model. This avoids confusion and simplifies the structure by not allowing the creation of tightly coupled systems.
 
-Вместо того, чтоб не добавлять лишние связи в сущность, и потом не создавать к примеру лишнюю сущность без связей.
+Instead of adding unnecessary relationships to an entity and then creating an entity without any relationships, for example.
 
 ```php
 <?php
@@ -207,7 +202,7 @@ final class BrandCreatorAggregate
 
 ### Constants 
 
-Constant - это обычный класс с константами. Все всегда сталкиваются с регулярными выражениями, id статусов, и т.д. Теперь все константы выносим в отдельные классы для переиспользования.
+Constant - is a regular class with constants. Everyone always encounters regular expressions, status IDs, etc. Now, all constants are moved to separate classes for reuse.
 
 ```php
 <?php
@@ -221,7 +216,7 @@ final class DbConst
 
 ### Exceptions 
 
-Exceptions - хранит в себе именные ошибки. Не выкидывайте дефолтный ексепшн, если необходимо выкинуть ошибку - выкидывайте кастомную ошибку. Использовать их можно и нужно везде Repositories, Services, etc..
+Exceptions - stores named errors. Do not throw the default exception if you need to throw an error - throw a custom error. They should be used and necessary everywhere in Repositories, Services, etc.
 ```php
 <?php
 namespace App\BrandDomain\Exceptions;
@@ -233,11 +228,11 @@ final class BrandCreatorException extends \Exception
 
 ### Dependency injection
 
-Dependency injection (DI) - это стиль настройки объекта, при котором поля объекта задаются внешней сущностью. Другими словами, объекты настраиваются внешними объектами. DI — это альтернатива самонастройке объектов. 
+Dependency injection (DI) is a style of object configuration where an object's fields are set by an external entity. In other words, objects are configured by external objects. DI is an alternative to self-configuration of objects.
 
 ### Repository
 
-Репозиторий - это классы, которые представляют собой коллекции объектов. Они не описывают хранение в базах данных или кэширование или решение любой другой технической проблемы. Репозитории представляют коллекции. Как мы храним эти коллекции — это просто деталь реализации. В репозиториях мы пишем все запросы к базам MySQL, MongoDB, ClickHouse и т. д. В репозиториях не реализуем методы удаления/редактирования/создания сущностей. Используем для этого UnitOfWork.
+Repository - these are classes that represent collections of objects. They do not describe storage in databases, caching, or the solution of any other technical problem. Repositories represent collections. How we store these collections is simply an implementation detail. In repositories, we write all queries to databases such as MySQL, MongoDB, ClickHouse, etc. We do not implement methods for deleting/editing/creating entities in repositories. We use UnitOfWork for this.
 ```php
 <?php
 namespace App\BrandDomain\Repositories;
@@ -255,7 +250,7 @@ final class BrandRepository
     ) {
     }
 
-    // пример получения одного обьекта 
+    // Example of retrieving a single object
     public function getBrandByGuid(Uuid $guid): BrandObject
     {
         $builder = $this->connection->createQueryBuilder();
@@ -273,7 +268,7 @@ final class BrandRepository
         );
     }
 
-    // пример получения листа  
+    // An example of obtaining a list  
     public function getBrandsByFilter(BrandFilterObject $filter): \Generator
     {
         $builder = $this->connection->createQueryBuilder();
@@ -292,7 +287,7 @@ final class BrandRepository
         }
     }
     
-    // пример проверки на существование
+    // Example of checking for existence
     public function isExistByName(string $name): bool
     {
         $builder = $this->connection->createQueryBuilder();
@@ -310,11 +305,11 @@ final class BrandRepository
 
 ### UnitOfWork 
 
-UnitOfWork [паттерн](https://martinfowler.com/eaaCatalog/unitOfWork.html) используется в Service для сохранения/редактирования/удаления всех сущностей в рамках одной транзакции. Пример реализации [Entity Manager у Doctrine](https://symfony.com/doc/current/doctrine.html)
+UnitOfWork - [pattern](https://martinfowler.com/eaaCatalog/unitOfWork.html) is used in Service to save/edit/delete all entities within a single transaction. An example of implementation is [Entity Manager in Doctrine](https://symfony.com/doc/current/doctrine.html).
 
 ### Services 
 
-Service(Сервис) - это класс/классы, которые реализуют бизнес логику, и взаимодействуют с сущностями. Реализация сервиса зависит от кейсов. В сервисах можно реализовывать собственную архитектуру. Реализовывать паттерны. Использовать дополнительные сущности. Создаем их в рамках сервиса и используем там же. На выходе из сервиса все же получать описанные здесь сущности Entity/Aggregate/ValueObject
+Service - is a class or classes that implement business logic and interact with entities. The implementation of the service depends on the use cases. Services can implement their own architecture, implement patterns, and use additional entities created within the service. Upon exiting the service, we still obtain the entities described here: Entity/Aggregate/ValueObject.
 ```php
 <?php
 namespace App\BrandDomain\Services\Create;
@@ -351,10 +346,10 @@ final class BrandCreator
 }
 ```
 
-### Коллекции
+### Collections
 
-Советуюем использовать реализацию [https://github.com/ramsey/collection](https://github.com/ramsey/collection) так как они типизированы. По возможности не использовать массивы.
+We recommend using the implementation [https://github.com/ramsey/collection](https://github.com/ramsey/collection) as they are typed. If possible, avoid using arrays.
 
-## Автоматизация проверки архитектуры
+## Automated Architecture Checking
 
-Для автоматизации проверки советуем испольозвать в проектах [deptrac](https://github.com/qossmic/deptrac) и [psalm](https://github.com/vimeo/psalm) на 3 уровне. Проверять ее на каждой пушнутой ветке в репозиторий при помоши экшена.
+To automate the checking of architecture, we recommend using [deptrac](https://github.com/qossmic/deptrac) and [psalm](https://github.com/vimeo/psalm) in projects at level 3. It should be checked on every pushed branch to the repository using an action.
