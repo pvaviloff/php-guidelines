@@ -52,6 +52,7 @@ The programmer's priorities should correspond to business priorities.
 The programmer should act as a translator from the language of the project manager to the programming language.
 
 We also adhere to the principle of a "layered cake." We delimit responsibility zones and link each zone using dependency injection (DI).
+
 ![onion](./images/onion.png)
 
 #### Used from SOLID:
