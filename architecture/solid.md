@@ -14,7 +14,7 @@ class Bill implements FileContract
 {
     public function getDocumentBody(): string
     {
-        ...
+        # some logic
         return "Bill sum";
     }
 }
@@ -23,7 +23,7 @@ class Report implements FileContract
 {
     public function getDocumentBody(): string
     {
-        ...
+        # some logic
         return "Report data";
     }
 }

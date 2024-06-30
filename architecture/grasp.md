@@ -81,7 +81,7 @@ class Bill {
         foreach($this->billProducts as $billProduct) {
             $totalSum += $billProduct->getSum();
         }
-        ...
+        # some logic
     }
 }
 ```

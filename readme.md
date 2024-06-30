@@ -1,6 +1,8 @@
-## PHP Guidelines
+# PHP Guidelines
 
-### Introduction
+An example of the concept can be found at the link: [PHP Guidelines example](https://github.com/pvaviloff/php-guidelines-example)
+
+## Introduction
 
 This document provides a set of strategies/recommendations for scaling up development teams and structuring projects. To achieve team scalability, there are two goals that drive the process: writing code as if it was developed by a single developer, and writing documentation that can be understood by someone off the street.
 
@@ -14,7 +16,7 @@ People work on the project, and there is a risk of encountering misunderstanding
 
 The team is not homogeneous. The end of the implementation process can be considered when 80% of the team follows the established process. The introduction of new technology generates/changes/imposes restrictions on the work process. Before implementation, an analysis of the team's readiness is required.
 
-### Basic concepts and logic for applying theoretical knowledge
+## Basic concepts and logic for applying theoretical knowledge
 
 - How to write code? Basic approaches to coding.
     - [Functional programming](./architecture/functional-programming.md)
@@ -24,7 +26,7 @@ The team is not homogeneous. The end of the implementation process can be consid
     - [SOLID](./architecture/solid.md)
     - [Design patterns](./architecture/design-patterns.md)
 
-### Preamble
+## Preamble
 The main goal of the team is to solve business process-related problems promptly. Therefore, all code should be written according to [PSR-4](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader-examples.md) and [Clean Code](https://github.com/piotrplenik/clean-code-php). If you are not sure whether you are writing readable code, consult your neighbor. It does not have to be someone from the team. We follow the rule: "If two people understood what was written, the third is likely to understand it too."
 
 The first problems start with implicitly described tasks and poorly designed base. If you have any questions while reading the task, first of all, write them in the task comment and ask the PM. There are often situations where you discuss the clarification of the task directly with the task assigner. If this happens, make it a rule to notify the PM of any changes/clarifications. Ask the task assigner to adjust the task or even just send the correspondence in which you resolved the unclear points to the task. All clarifications and/or changes to the task must be recorded in the task. This can lead to a task re-estimation.
@@ -39,7 +41,7 @@ Do we need to write documentation? Documentation is only necessary for functiona
 
 Documentation should consist of two blocks. You describe the technical documentation. Also, through the PM, ask the product owner to describe the user documentation, which should describe: why the functionality was created, how to use it (preferably with screenshots) from the user's point of view (UX). You need to describe how it should work, and the product owner should describe how to work with it.
 
-#### Used concepts
+### Used concepts
 
 The team aims to write as one developer. What does it mean? Empirically identified principles and recommendations have been developed that work within the overall system and allow the entire team to write in one style. The basis is taken from the Symfony documentation, SOLID, and DDD.
 
@@ -53,9 +55,11 @@ The programmer should act as a translator from the language of the project manag
 
 We also adhere to the principle of a "layered cake." We delimit responsibility zones and link each zone using dependency injection (DI).
 
-![onion](./images/onion.png)
+<p align="center">
+  <img src="./images/onion.png" />
+</p>
 
-#### Used from SOLID:
+### Used from SOLID:
 
 The Single Responsibility Principle states that a service should have only one responsibility. It is easily implemented in our conditions, both during refactoring and when developing new functionality.
 
@@ -65,13 +69,13 @@ The Interface Segregation Principle suggests that it is better to have many inte
 
 The Liskov Substitution Principle states that if S is a subtype of T, then objects of type T can be replaced with objects of type S without any desired properties being changed. It is partially achievable and depends on implementation.
 
-#### Not used from SOLID:
+### Not used from SOLID:
 
 The Open Closed Principle A class should be open for extension but closed for modification. The biggest problem is that not everyone from other teams may follow the SOLID principles. In projects with 10+ people, it is difficult to maintain versioning of objects.
 
 We use Dependency Injection to remove dependencies between Controllers, Services, and Repositories and to reduce code coupling.
 
-### General implementation scheme
+## General implementation scheme
 
 Based on MVC, we build a basic architecture:
 
@@ -80,8 +84,6 @@ Service - a class that implements business logic.
 Repository - a class that manages data storage (MySQL, MongoDB, ClickHouse). We write all queries to the databases in it.
 
 Entity - a class that describes the structure of databases.
-
-Transformer - a class that transforms the final result for further transmission. Place it next to the service for which it is intended.
 
 To link the Controller, Service, and Repository together, we use a Value Object. The Value Object also combines the concept of DTO to reduce the number of entities. Often, DTOs when changing business logic often merge into Value Objects.
 
@@ -100,7 +102,7 @@ In Controllers that implement business logic from Domains, it is prohibited to u
 The use of traits is prohibited in projects.
 Direct access to the container is prohibited (with the exception of service providers and factories).
 
-#### Project structure
+## Project structure
 
 ---- src/  
 ---- ---- ExampleDomain/  
@@ -110,57 +112,46 @@ Direct access to the container is prohibited (with the exception of service prov
 ---- ---- ---- [Exceptions/](#exceptions)  
 ---- ---- ---- [Repositories/](#repository)  
 ---- ---- ---- [Services/](#services)  
----- ---- ---- [ValueObjects/](#dto-и-valueobject)  
+---- ---- ---- [ValueObjects/](#dto-and-valueobject)  
 ---- ---- ExampleInfrastructure/  
 ---- ---- ---- Commands/  
 ---- ---- ---- Controllers/  
----- ---- ---- EventListeners/  
+---- ---- ---- MessageHandlers/  
 ---- ---- ---- Requests/  
 ---- ---- ---- Responses/  
 
-### Entity
+## Entity
 
 Entity - defines a certain entity in the business logic and always has an identifier (a unique key. The key can be expressed as an id/guid/uuid or a combination of properties (a composite unique key) that will identify the entity), by which the Entity can be found or compared to another Entity. If two Entities have identical identifiers, they are the same Entity. It is almost always mutable.
 
 ```php
 <?php
+
 namespace App\BrandDomain\Entities;
 
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\Table;
 use Symfony\Component\Uid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\UniqueConstraint;
 
-/**
- * @Entity
- * @Table(name="brands")
- */
+
+#[ORM\Entity]
+#[ORM\Table(name:"brands")]
 class BrandEntity
 {
-    /**
-     * @ORM\Id()
-     * @ORM\Column(type="uuid")
-     */
-    private Uuid $guid;
+    #[ORM\Id]
+    #[ORM\Column(type: "uuid")]
+    public readonly Uuid $guid;
 
     public function __construct(
-        /**
-         * @ORM\Column(length: 140)
-         */
-        private readonly int $name,
+        #[ORM\Column(length: 140)]
+        public readonly string $name,
     ) {
         $this->guid = Uuid::v4();
     }
 
-    public function getGuid(): Uuid
-    {
-        return $this->guid;
-    }
 }
 ```
 
-### DTO and ValueObject
+## DTO and ValueObject
 
 Data Transfer Object (DTO) - is an object, a data structure that carries information between processes (Controllers, Services, Repositories). It is desirable not to change already set properties to get rid of implicit logic. It has no dependencies. It only contains typed properties and getters/setters. No logical actions can be performed in this object. It is often used to pass filters from the controller to services and repositories.
 
@@ -179,7 +170,7 @@ final class BrandCreatorObject
 }
 ```
 
-### Aggregates 
+## Aggregates 
 
 Aggregate - the use of aggregates allows avoiding excessive connection between objects that make up the model. This avoids confusion and simplifies the structure by not allowing the creation of tightly coupled systems.
 
@@ -201,7 +192,7 @@ final class BrandCreatorAggregate
 }
 ```
 
-### Constants 
+## Constants 
 
 Constant - is a regular class with constants. Everyone always encounters regular expressions, status IDs, etc. Now, all constants are moved to separate classes for reuse.
 
@@ -215,7 +206,7 @@ final class DbConst
 }
 ```
 
-### Exceptions 
+## Exceptions 
 
 Exceptions - stores named errors. Do not throw the default exception if you need to throw an error - throw a custom error. They should be used and necessary everywhere in Repositories, Services, etc.
 ```php
@@ -227,11 +218,11 @@ final class BrandCreatorException extends \Exception
 }
 ```
 
-### Dependency injection
+## Dependency injection
 
 Dependency injection (DI) is a style of object configuration where an object's fields are set by an external entity. In other words, objects are configured by external objects. DI is an alternative to self-configuration of objects.
 
-### Repository
+## Repository
 
 Repository - these are classes that represent collections of objects. They do not describe storage in databases, caching, or the solution of any other technical problem. Repositories represent collections. How we store these collections is simply an implementation detail. In repositories, we write all queries to databases such as MySQL, MongoDB, ClickHouse, etc. We do not implement methods for deleting/editing/creating entities in repositories. We use UnitOfWork for this.
 ```php
@@ -247,7 +238,7 @@ use Symfony\Component\Uid\Uuid;
 final class BrandRepository
 {
     public function __construct(
-        private Connection $connection;
+        private Connection $connection,
     ) {
     }
 
@@ -278,11 +269,12 @@ final class BrandRepository
                 'name',
             ])
             ->from(DbConst::BRANDS);
-        ...
+        # some logic
+        
         foreach ($query->executeQuery()->iterateAssociative() as $brand) {
 
             yield new BrandObject(
-                Uuid::fromString(brand['guid']),
+                Uuid::fromString($brand['guid']),
                 $brand['name'],
             );
         }
@@ -304,11 +296,11 @@ final class BrandRepository
 }
 ```
 
-### UnitOfWork 
+## UnitOfWork 
 
 UnitOfWork - [pattern](https://martinfowler.com/eaaCatalog/unitOfWork.html) is used in Service to save/edit/delete all entities within a single transaction. An example of implementation is [Entity Manager in Doctrine](https://symfony.com/doc/current/doctrine.html).
 
-### Services 
+## Services 
 
 Service - is a class or classes that implement business logic and interact with entities. The implementation of the service depends on the use cases. Services can implement their own architecture, implement patterns, and use additional entities created within the service. Upon exiting the service, we still obtain the entities described here: Entity/Aggregate/ValueObject.
 ```php
@@ -347,7 +339,7 @@ final class BrandCreator
 }
 ```
 
-### Collections
+## Collections
 
 We recommend using the implementation [https://github.com/ramsey/collection](https://github.com/ramsey/collection) as they are typed. If possible, avoid using arrays.
 

@@ -16,7 +16,7 @@ class FoodBill implements IBill
 {
     public function getSum(): float
     {
-        ...
+        # some logic
     }
 }
 
@@ -24,7 +24,7 @@ class DrinkBill implements IBill
 {
     public function getSum(): float
     {
-        ...
+        # some logic
     }
 }
 
@@ -43,7 +43,7 @@ class FullBill
         foreach($this->bills as $bill) {
             $sum += $bill->getSum();
         }
-        ...
+        # some logic
     }
 }
 ```

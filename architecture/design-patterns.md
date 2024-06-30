@@ -17,7 +17,7 @@ class TruckArrival implements IArrival
 {
     public function getProducts(): array
     {
-    ...
+    # some logic
     }
 }
 
@@ -25,7 +25,7 @@ class ShipArrival implements IArrival
 {
     public function getProducts(): array
     {
-    ...
+    # some logic
     }
 }
 
@@ -36,20 +36,24 @@ class StockControl
 
     private function getArrival(int $arrivalType): IArrival
     {
+        $arrival = null;
         if ($arrivalType === self::TRUCK_ARRIVAL) {
-            return new TruckArrival();
+            $arrival = new TruckArrival();
+        } elseif ($arrivalType === self::SHIP_ARRIVAL) {
+            $arrival = new ShipArrival();
+        } else {
+            throw new \Exception("{$arrivalType} don`t exist");
         }
-        if ($arrivalType === self::SHIP_ARRIVAL) {
-            return new ShipArrival();
-        }
+        
+        return $arrival;
     }
     
     public function control()
     {
-        ...
+        # some logic
         $arrival = $this->getArrival($arrivalType);
         $products = $arrival->getProducts();
-        ...
+        # some logic
     }
 }
 ```
